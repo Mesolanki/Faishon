@@ -48,30 +48,43 @@ const Store = () => {
             </h1>
           </Motion.div>
 
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-col md:flex-row items-center gap-6 w-full lg:w-auto">
             <Motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="flex flex-wrap gap-2 p-1.5 bg-white/5 backdrop-blur-3xl rounded-full border border-white/10"
+              variants={{
+                hidden: { opacity: 0, x: 20 },
+                visible: { 
+                  opacity: 1, 
+                  x: 0,
+                  transition: { staggerChildren: 0.05, delayChildren: 0.2 }
+                }
+              }}
+              initial="hidden"
+              animate="visible"
+              className="flex items-center gap-2 p-1.5 bg-white/5 backdrop-blur-3xl rounded-full border border-white/10 overflow-x-auto no-scrollbar max-w-full"
+              style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
             >
               {CATEGORIES.map((cat) => (
-                <button
+                <Motion.button
                   key={cat}
+                  variants={{
+                    hidden: { opacity: 0, y: 10 },
+                    visible: { opacity: 1, y: 0 }
+                  }}
                   onClick={() => setFilter(cat)}
                   className={cn(
-                    "px-6 py-2.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] transition-all",
+                    "px-6 py-2.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] transition-all whitespace-nowrap shrink-0",
                     filter === cat ? "bg-white text-black shadow-xl" : "text-gray-500 hover:text-white"
                   )}
                 >
                   {cat}
-                </button>
+                </Motion.button>
               ))}
             </Motion.div>
 
-            <div className="relative">
+            <div className="relative shrink-0">
               <button 
                 onClick={() => setIsSortOpen(!isSortOpen)}
-                className="px-6 py-4 bg-white/5 border border-white/10 rounded-full flex items-center gap-4 text-[10px] font-black text-white tracking-widest uppercase hover:bg-white/10 transition-all"
+                className="px-6 py-4 bg-white/5 border border-white/10 rounded-full flex items-center gap-4 text-[10px] font-black text-white tracking-widest uppercase hover:bg-white/10 transition-all whitespace-nowrap"
               >
                 Sort: {sortBy} <ChevronDown size={14} className={cn("transition-transform", isSortOpen && "rotate-180")} />
               </button>
