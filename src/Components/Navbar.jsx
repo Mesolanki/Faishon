@@ -46,25 +46,36 @@ const Navbar = () => {
     <div className="fixed top-6 inset-x-0 z-[100] flex justify-center px-4 pointer-events-none">
       <Motion.nav
         initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
-        className={cn(
-          "flex items-center justify-between py-2 px-3 md:px-6 rounded-full pointer-events-auto transition-all duration-500 ease-in-out",
-          "bg-black/40 backdrop-blur-2xl border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)]",
-          isScrolled ? "w-full max-w-2xl" : "w-full max-w-6xl"
-        )}
+        animate={{ 
+          y: 0, 
+          opacity: 1,
+          maxWidth: isSearchOpen ? "800px" : (isScrolled ? "1000px" : "1400px"),
+          width: "95%"
+        }}
+        transition={{ 
+          duration: 1.2, 
+          ease: [0.23, 1, 0.32, 1],
+          maxWidth: { duration: 0.8, ease: [0.23, 1, 0.32, 1] }
+        }}
+        className="flex items-center justify-between py-3 px-6 md:px-10 bg-black/40 backdrop-blur-3xl border border-white/10 rounded-full pointer-events-auto shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
       >
         <Link to="/" className="flex items-center gap-2 cursor-pointer group shrink-0">
-          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center group-hover:shadow-[0_0_20px_rgba(99,102,241,0.6)] transition-all">
-            <Sparkles size={18} className="text-white" />
-          </div>
+          <Motion.div 
+            whileHover={{ rotate: 90, scale: 1.1 }}
+            className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(99,102,241,0.4)]"
+          >
+            <Sparkles size={20} className="text-white" />
+          </Motion.div>
           <span className="text-xl font-black tracking-tighter text-white uppercase italic">NEO.</span>
         </Link>
 
         {!isSearchOpen && (
           <Motion.div 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }}
+            initial="hidden"
+            animate="visible"
+            variants={{
+              visible: { transition: { staggerChildren: 0.05 } }
+            }}
             className="hidden md:flex items-center gap-1 p-1 bg-white/5 rounded-full border border-white/5"
           >
             {navItems.map((item) => (
@@ -73,25 +84,39 @@ const Navbar = () => {
                 to={item.path}
                 end={item.path === '/'}
                 className={({ isActive }) => cn(
-                  "relative px-5 py-2 text-[10px] font-bold transition-all rounded-full flex items-center gap-2 uppercase tracking-widest",
-                  isActive ? "text-white" : "text-gray-500 hover:text-gray-300"
+                  "relative px-5 py-2.5 text-[10px] font-bold transition-all rounded-full flex items-center gap-2 uppercase tracking-widest group",
+                  isActive ? "text-white" : "text-gray-500 hover:text-gray-200"
                 )}
               >
                 {({ isActive }) => (
-                  <>
+                  <Motion.div 
+                    variants={{
+                      hidden: { y: -20, opacity: 0 },
+                      visible: { y: 0, opacity: 1 }
+                    }}
+                    className="relative"
+                  >
                     <AnimatePresence>
                       {isActive && (
                         <Motion.div
                           layoutId="nav-glow"
-                          className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full shadow-[0_0_15px_rgba(99,102,241,0.4)]"
-                          transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                          className="absolute -inset-x-1 -inset-y-0.5 bg-gradient-to-r from-indigo-600/80 to-purple-600/80 rounded-full shadow-[0_0_20px_rgba(99,102,241,0.5)]"
+                          transition={{ type: "spring", bounce: 0.25, duration: 0.7 }}
                         />
                       )}
                     </AnimatePresence>
+                    
+                    {!isActive && (
+                      <Motion.div
+                        className="absolute inset-0 bg-white/5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        layoutId="nav-hover"
+                      />
+                    )}
+
                     <span className="relative z-10 flex items-center gap-2">
                       {item.icon} {item.name}
                     </span>
-                  </>
+                  </Motion.div>
                 )}
               </NavLink>
             ))}
@@ -148,22 +173,37 @@ const Navbar = () => {
                 <Search size={20} className="text-gray-400" />
                 <input type="text" placeholder="Search Store" className="bg-transparent border-none outline-none text-white ml-3 w-full font-mono uppercase text-xs" />
              </div>
-             <div className="flex flex-col gap-4">
+             <Motion.div 
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
+                }}
+                initial="hidden"
+                animate="visible"
+                className="flex flex-col gap-4"
+             >
                 {navItems.map((item) => (
-                  <NavLink 
-                    key={item.name} 
-                    to={item.path} 
-                    end={item.path === '/'}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={({ isActive }) => cn(
-                      "text-5xl font-black tracking-tighter transition-all uppercase leading-none",
-                      isActive ? "text-indigo-500 italic" : "text-white/40 hover:text-white"
-                    )}
+                  <Motion.div
+                    key={item.name}
+                    variants={{
+                      hidden: { x: -40, opacity: 0 },
+                      visible: { x: 0, opacity: 1 }
+                    }}
                   >
-                    {item.name}
-                  </NavLink>
+                    <NavLink 
+                      to={item.path} 
+                      end={item.path === '/'}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={({ isActive }) => cn(
+                        "text-5xl font-black tracking-tighter transition-all uppercase leading-none block py-2",
+                        isActive ? "text-indigo-500 italic" : "text-white/40 hover:text-white"
+                      )}
+                    >
+                      {item.name}
+                    </NavLink>
+                  </Motion.div>
                 ))}
-             </div>
+             </Motion.div>
              <div className="pt-8 border-t border-white/5 flex justify-between items-center">
                 <p className="text-[10px] font-mono text-gray-600 uppercase tracking-widest">System_v2.06</p>
                 <div className="flex gap-4">
