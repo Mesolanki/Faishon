@@ -71,6 +71,7 @@ const Navbar = () => {
               <NavLink
                 key={item.name}
                 to={item.path}
+                end={item.path === '/'}
                 className={({ isActive }) => cn(
                   "relative px-5 py-2 text-[10px] font-bold transition-all rounded-full flex items-center gap-2 uppercase tracking-widest",
                   isActive ? "text-white" : "text-gray-500 hover:text-gray-300"
@@ -152,6 +153,7 @@ const Navbar = () => {
                   <NavLink 
                     key={item.name} 
                     to={item.path} 
+                    end={item.path === '/'}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={({ isActive }) => cn(
                       "text-5xl font-black tracking-tighter transition-all uppercase leading-none",

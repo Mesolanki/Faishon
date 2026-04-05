@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion as Motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import { ArrowUpRight, Play, ShieldCheck, Zap } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
   const { scrollY } = useScroll();
@@ -59,12 +60,14 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-wrap gap-6">
-            <Motion.button 
-              whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(99,102,241,0.4)" }}
-              className="px-12 py-6 bg-indigo-600 text-white rounded-2xl font-black flex items-center gap-3 group"
-            >
-              SHOP NOW <ArrowUpRight className="group-hover:rotate-45 transition-transform" />
-            </Motion.button>
+            <Link to="/store">
+              <Motion.button 
+                whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(99,102,241,0.4)" }}
+                className="px-12 py-6 bg-indigo-600 text-white rounded-2xl font-black flex items-center gap-3 group"
+              >
+                SHOP NOW <ArrowUpRight className="group-hover:rotate-45 transition-transform" />
+              </Motion.button>
+            </Link>
             <button className="flex items-center gap-4 text-white group">
               <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
                 <Play fill="currentColor" size={20} />
