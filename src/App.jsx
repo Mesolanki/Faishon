@@ -26,7 +26,7 @@ const App = () => {
         />
         <Navbar />
         <AnimatePresence mode="wait">
-          <Routes location={location} key={location.pathname}>
+          <Routes>
             <Route path="/" element={
               <>
                 <Hero />
@@ -40,6 +40,12 @@ const App = () => {
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="*" element={
+              <>
+                <Hero />
+                <Home />
+              </>
+            } />
           </Routes>
         </AnimatePresence>
       </main>
